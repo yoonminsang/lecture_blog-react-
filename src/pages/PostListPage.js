@@ -1,11 +1,14 @@
 import React from 'react';
+import Footer from '../components/common/Footer';
 import Header from '../components/common/Header';
+import PostList from '../components/posts/PostList';
 
 const PostListPage = () => {
   return (
     <>
       <Header />
-      <div>1sdf</div>
+      <PostList />
+      <Footer />
     </>
   );
 };
