@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Button from './Button';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -29,6 +31,16 @@ const Right = styled.div`
   margin-left: auto;
 `;
 
+const SearchButton = styled.button`
+  margin-right: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 const Empty = styled.div`
   height: 4.375rem;
 `;
@@ -43,7 +55,14 @@ const Header = () => {
               <Link to="/">React Blog</Link>
             </h1>
           </Left>
-          <Right></Right>
+          <Right>
+            <SearchButton>
+              <AiOutlineSearch />
+            </SearchButton>
+            <Button to="/login" gray="true">
+              로그인
+            </Button>
+          </Right>
         </Flex>
       </HeaderBlock>
       <Empty></Empty>
