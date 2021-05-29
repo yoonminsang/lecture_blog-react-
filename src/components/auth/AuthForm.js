@@ -1,5 +1,5 @@
 import oc from 'open-color';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../common/Button';
@@ -36,7 +36,25 @@ const Footer = styled.div`
   }
 `;
 
-const AuthForm = ({ type, input, onChange, onSubmit }) => {
+const ErrorDiv = styled.div`
+  color: red;
+  text-align: center;
+`;
+
+const AuthForm = ({ type, input, onChange, onSubmit, error, errorType }) => {
+  const emailRef = useRef(null);
+  const passwardRef = useRef(null);
+  const passwardConfirmRef = useRef(null);
+  useEffect(() => {
+    switch (errorType) {
+      case 'email':
+        return emailRef.current.focus();
+      case 'password':
+        return passwardRef.current.focus();
+      case 'passwardConfirm':
+        return passwardConfirmRef.current.focus();
+    }
+  }, [errorType]);
   const text = type === 'login' ? '로그인' : '회원가입';
   const { email, password, passwordConfirm } = input;
   return (
@@ -44,25 +62,31 @@ const AuthForm = ({ type, input, onChange, onSubmit }) => {
       <AuthFormBlock>
         <form onSubmit={onSubmit}>
           <Input
+            ref={emailRef}
             placeholder="이메일"
             name="email"
             value={email}
             onChange={onChange}
           />
           <Input
+            ref={passwardRef}
             placeholder="비밀번호"
             name="password"
             value={password}
             onChange={onChange}
+            type="password"
           />
           {type === 'register' && (
             <Input
+              ref={passwardConfirmRef}
               placeholder="비밀번호 확인"
               name="passwordConfirm"
               value={passwordConfirm}
               onChange={onChange}
+              type="password"
             />
           )}
+          {error && <ErrorDiv>{error}</ErrorDiv>}
           <MarginButton blue fullWidth>
             {text}
           </MarginButton>
