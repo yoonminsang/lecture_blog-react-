@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import AuthForm from '../../components/auth/AuthForm';
 
@@ -13,7 +14,7 @@ const RegisterForm = () => {
     const { value, name } = e.target;
     setInput({ ...input, [name]: value });
   };
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const { email, password, passwordConfirm } = input;
     if (email === '') {
@@ -29,8 +30,21 @@ const RegisterForm = () => {
       setError('비밀번호가 일치하지 않습니다');
       setErrorType('password');
       setInput({ ...input, password: '', passwordConfirm: '' });
+    } else if (
+      /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(
+        email
+      ) === false
+    ) {
+      setError('이메일 형식을 확인해주세요');
+      setErrorType('email');
     } else {
       // 서버에 보내기
+      try {
+        const res = await axios.get('auth/register');
+        console.log(res);
+      } catch (e) {
+        console.error('register error', e);
+      }
     }
   };
 
