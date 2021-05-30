@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 import AuthForm from '../../components/auth/AuthForm';
 
 const RegisterForm = () => {
+  const history = useHistory();
   const [error, setError] = useState(null);
   const [errorType, setErrorType] = useState(null);
   const [input, setInput] = useState({
@@ -40,7 +42,18 @@ const RegisterForm = () => {
     } else {
       // 서버에 보내기
       try {
-        const res = await axios.get('auth/register');
+        const res = await axios({
+          method: 'post',
+          url: '/auth/register',
+          data: { email, password },
+        });
+        if (res.data.status === 200) {
+          alert(res.data.text);
+          history.push('/');
+        } else {
+          setError(res.data.text);
+          setErrorType('email');
+        }
         console.log(res);
       } catch (e) {
         console.error('register error', e);
