@@ -47,16 +47,22 @@ const RegisterForm = () => {
           url: '/auth/register',
           data: { email, password },
         });
-        if (res.data.status === 200) {
-          alert(res.data.text);
+        // if (res.data.status === 200) {
+        //   alert(res.data.text);
+        //   history.push('/');
+        // } else {
+        //   setError(res.data.text);
+        //   setErrorType('email');
+        // }
+        if (res.status === 200) {
+          alert('회원가입을 축하합니다.');
           history.push('/');
-        } else {
-          setError(res.data.text);
-          setErrorType('email');
         }
-        console.log(res);
       } catch (e) {
-        console.error('register error', e);
+        if (e.response.status === 409) {
+          setError('아이디가 존재합니다');
+          setErrorType('email');
+        } else console.error('register error', e);
       }
     }
   };
