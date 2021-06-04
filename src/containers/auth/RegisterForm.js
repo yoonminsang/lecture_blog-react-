@@ -47,13 +47,6 @@ const RegisterForm = () => {
           url: '/auth/register',
           data: { email, password },
         });
-        // if (res.data.status === 200) {
-        //   alert(res.data.text);
-        //   history.push('/');
-        // } else {
-        //   setError(res.data.text);
-        //   setErrorType('email');
-        // }
         if (res.status === 200) {
           alert('회원가입을 축하합니다.');
           history.push('/');
