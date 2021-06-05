@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import AuthForm from '../../components/auth/AuthForm';
+import { login } from '../../modules/auth';
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [errorType, setErrorType] = useState(null);
   const [input, setInput] = useState({
@@ -23,6 +26,7 @@ const LoginForm = () => {
       setErrorType('password');
     } else {
       // 서버에 보내기
+      dispatch(login(email, password));
     }
   };
 
