@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AuthForm from '../../components/auth/AuthForm';
 import { login } from '../../modules/auth';
 
@@ -11,6 +11,13 @@ const LoginForm = () => {
     email: '',
     password: '',
   });
+  const { authError, loading } = useSelector(({ auth }) => ({
+    authError: auth.error,
+    loading: auth.loading,
+  }));
+  useEffect(() => {
+    setError(authError);
+  }, [authError]);
   const onChange = (e) => {
     const { value, name } = e.target;
     setInput({ ...input, [name]: value });
@@ -38,6 +45,7 @@ const LoginForm = () => {
       onSubmit={onSubmit}
       error={error}
       errorType={errorType}
+      loading={loading}
     />
   );
 };

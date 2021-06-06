@@ -41,7 +41,15 @@ const ErrorDiv = styled.div`
   text-align: center;
 `;
 
-const AuthForm = ({ type, input, onChange, onSubmit, error, errorType }) => {
+const AuthForm = ({
+  type,
+  input,
+  onChange,
+  onSubmit,
+  error,
+  errorType,
+  loading,
+}) => {
   const emailRef = useRef(null);
   const passwardRef = useRef(null);
   const passwardConfirmRef = useRef(null);
@@ -59,6 +67,7 @@ const AuthForm = ({ type, input, onChange, onSubmit, error, errorType }) => {
   const { email, password, passwordConfirm } = input;
   return (
     <>
+      {loading && <div>로딩</div>}
       <AuthFormBlock>
         <form onSubmit={onSubmit}>
           <Input

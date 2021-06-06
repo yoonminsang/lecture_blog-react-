@@ -15,11 +15,11 @@ export const login = (email, password) => async (dispatch) => {
       data: { email, password },
     });
     const user = res.data;
-    dispatch({ type: LOGIN_SUCCESS, user });
+    dispatch({ type: LOGIN_SUCCESS, payload: user });
   } catch (e) {
     const error =
       e.response.status === 409 ? '아이디 또는 비밀번호가 틀립니다' : e;
-    dispatch({ type: LOGIN_ERROR, error });
+    dispatch({ type: LOGIN_ERROR, payload: error });
   }
 };
 // export const login = createAction(LOGIN, (user) => user);
@@ -34,28 +34,19 @@ const initialState = {
 const auth = handleActions(
   {
     [LOGIN]: (state) => ({
-      ...state,
-      auth: {
-        user: null,
-        loadgin: true,
-        error: null,
-      },
+      user: null,
+      loading: true,
+      error: null,
     }),
     [LOGIN_SUCCESS]: (state, { payload: user }) => ({
-      ...state,
-      auth: {
-        user,
-        loading: false,
-        error: null,
-      },
+      user,
+      loading: false,
+      error: null,
     }),
     [LOGIN_ERROR]: (state, { payload: e }) => ({
-      ...state,
-      auth: {
-        user: null,
-        loading: false,
-        error: e,
-      },
+      user: null,
+      loading: false,
+      error: e,
     }),
     [LOGOUT]: (state) => state,
   },
