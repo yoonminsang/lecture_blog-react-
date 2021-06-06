@@ -4,25 +4,36 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import rootReducer from './modules';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createLogger } from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
+import { createBrowserHistory } from 'history';
+
+const customHistory = createBrowserHistory();
 
 const logger = createLogger();
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(ReduxThunk, logger))
+  composeWithDevTools(
+    applyMiddleware(
+      ReduxThunk.withExtraArgument({ history: customHistory }),
+      logger
+    )
+  )
 );
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <Router history={customHistory}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </Router>,
   document.getElementById('root')
 );
 

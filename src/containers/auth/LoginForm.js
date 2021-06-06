@@ -12,11 +12,12 @@ const LoginForm = () => {
     password: '',
   });
   const { authError, loading } = useSelector(({ auth }) => ({
-    authError: auth.error,
-    loading: auth.loading,
+    authError: auth.login.error,
+    loading: auth.login.loading,
   }));
   useEffect(() => {
     setError(authError);
+    if (authError) setErrorType('email');
   }, [authError]);
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -32,7 +33,6 @@ const LoginForm = () => {
       setError('비밀번호를 입력하세요');
       setErrorType('password');
     } else {
-      // 서버에 보내기
       dispatch(login(email, password));
     }
   };

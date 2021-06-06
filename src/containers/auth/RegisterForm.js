@@ -1,10 +1,10 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AuthForm from '../../components/auth/AuthForm';
+import { register } from '../../modules/auth';
 
 const RegisterForm = () => {
-  const history = useHistory();
+  const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [errorType, setErrorType] = useState(null);
   const [input, setInput] = useState({
@@ -12,6 +12,14 @@ const RegisterForm = () => {
     password: '',
     passwordConfirm: '',
   });
+  const { authError, loading } = useSelector(({ auth }) => ({
+    authError: auth.register.error,
+    loading: auth.register.loading,
+  }));
+  useEffect(() => {
+    setError(authError);
+    if (authError) setErrorType('email');
+  }, [authError]);
   const onChange = (e) => {
     const { value, name } = e.target;
     setInput({ ...input, [name]: value });
@@ -40,23 +48,7 @@ const RegisterForm = () => {
       setError('이메일 형식을 확인해주세요');
       setErrorType('email');
     } else {
-      // 서버에 보내기
-      try {
-        const res = await axios({
-          method: 'post',
-          url: '/auth/register',
-          data: { email, password },
-        });
-        if (res.status === 200) {
-          alert('회원가입을 축하합니다.');
-          history.push('/');
-        }
-      } catch (e) {
-        if (e.response.status === 409) {
-          setError('아이디가 존재합니다');
-          setErrorType('email');
-        } else console.error('register error', e);
-      }
+      dispatch(register(email, password));
     }
   };
 
@@ -68,6 +60,7 @@ const RegisterForm = () => {
       onSubmit={onSubmit}
       error={error}
       errorType={errorType}
+      loading={loading}
     />
   );
 };
