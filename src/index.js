@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
 import { Router } from 'react-router';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
@@ -29,9 +28,7 @@ const store = createStore(
 ReactDOM.render(
   <Router history={customHistory}>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <App />
     </Provider>
   </Router>,
   document.getElementById('root')

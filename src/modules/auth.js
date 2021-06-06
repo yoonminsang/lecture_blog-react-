@@ -24,7 +24,6 @@ export const login =
       });
       const { user } = res.data;
       dispatch({ type: LOGIN_SUCCESS });
-      // dispatch({ type: LOGIN_SUCCESS, payload: user });
       dispatch({ type: AUTO_LOGIN_SUCCESS, payload: user });
       history.push('/');
     } catch (e) {
@@ -33,8 +32,17 @@ export const login =
       dispatch({ type: LOGIN_ERROR, payload: error });
     }
   };
-// export const login = createAction(LOGIN, (user) => user);
-export const logout = createAction(LOGOUT);
+
+// 로딩 구현 안함. 어차피 나중에 리팩토링
+export const logout = () => async (dispatch) => {
+  dispatch({ type: LOGOUT });
+  try {
+    await axios.get('/auth/logout');
+    dispatch({ type: AUTO_LOGIN_FAIL });
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 export const register =
   (email, password) =>
@@ -63,9 +71,9 @@ export const autoLogin = () => async (dispatch) => {
     const res = await axios.get('/auth');
     dispatch({ type: AUTO_LOGIN_SUCCESS, payload: res.user });
   } catch (e) {
-    dispatch({ type: AUTO_LOGIN_FAIL });
-    if (e.response.status === 409) console.log('자동 로그인 되어있지 않습니다');
-    else console.error(e);
+    const error =
+      e.response.status === 409 ? '자동 로그인 되어있지 않습니다' : e;
+    dispatch({ type: AUTO_LOGIN_FAIL, payload: error });
   }
 };
 
@@ -82,6 +90,7 @@ const initialState = {
   user: {
     user: null,
     loading: false,
+    error: null,
   },
 };
 
@@ -95,23 +104,28 @@ const auth = handleActions(
         error: null,
       },
     }),
-    [LOGIN_SUCCESS]: (state, { payload: user }) => ({
+    [LOGIN_SUCCESS]: (state) => ({
       ...state,
       login: {
-        // user,
         loading: false,
         error: null,
       },
     }),
-    [LOGIN_ERROR]: (state, { payload: e }) => ({
+    [LOGIN_ERROR]: (state, { payload: error }) => ({
       ...state,
       login: {
-        // user: null,
         loading: false,
-        error: e,
+        error,
       },
     }),
-    [LOGOUT]: (state) => state,
+    [LOGOUT]: (state) => ({
+      ...state,
+      user: {
+        user: null,
+        loading: false,
+        error: null,
+      },
+    }),
     [REGISTER]: (state) => ({
       ...state,
       register: {
@@ -126,11 +140,11 @@ const auth = handleActions(
         error: null,
       },
     }),
-    [REGISTER_ERROR]: (state, { payload: e }) => ({
+    [REGISTER_ERROR]: (state, { payload: error }) => ({
       ...state,
       register: {
         loading: false,
-        error: e,
+        error,
       },
     }),
     [AUTO_LOGIN]: (state) => ({
@@ -138,6 +152,7 @@ const auth = handleActions(
       user: {
         user: null,
         loading: true,
+        error: null,
       },
     }),
     [AUTO_LOGIN_SUCCESS]: (state, { payload: user }) => ({
@@ -145,13 +160,15 @@ const auth = handleActions(
       user: {
         user,
         loading: false,
+        error: null,
       },
     }),
-    [AUTO_LOGIN_FAIL]: (state) => ({
+    [AUTO_LOGIN_FAIL]: (state, { payload: error }) => ({
       ...state,
       user: {
         user: null,
         loading: false,
+        error,
       },
     }),
   },

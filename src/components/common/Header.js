@@ -29,6 +29,9 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
+  div {
+    margin-right: 1.5rem;
+  }
 `;
 
 const SearchButton = styled.button`
@@ -45,7 +48,7 @@ const Empty = styled.div`
   height: 4.375rem;
 `;
 
-const Header = () => {
+const Header = ({ user, onLogout }) => {
   return (
     <>
       <HeaderBlock>
@@ -59,9 +62,18 @@ const Header = () => {
             <SearchButton>
               <AiOutlineSearch />
             </SearchButton>
-            <Button to="/login" gray="true">
-              로그인
-            </Button>
+            {user ? (
+              <>
+                <div>{user.email}</div>
+                <Button gray="true" onClick={onLogout}>
+                  로그아웃
+                </Button>
+              </>
+            ) : (
+              <Button to="/login" gray="true">
+                로그인
+              </Button>
+            )}
           </Right>
         </Flex>
       </HeaderBlock>
