@@ -11,6 +11,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createLogger } from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
+import { autoLogin } from './modules/auth';
 
 const customHistory = createBrowserHistory();
 
@@ -24,6 +25,8 @@ const store = createStore(
     )
   )
 );
+
+store.dispatch(autoLogin());
 
 ReactDOM.render(
   <Router history={customHistory}>
