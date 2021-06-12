@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { createAction, handleActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
+import { authThunk } from '../lib/reduxUtils';
+import * as authAPI from '../api/auth';
 
 const LOGIN = 'auth/LOGIN';
 const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
@@ -10,30 +12,11 @@ const REGISTER_SUCCESS = 'auth/REGISTER_SUCCESS';
 const REGISTER_ERROR = 'auth/REGISTER_ERROR';
 const AUTO_LOGIN = 'auh/AUTOLOGIN';
 const AUTO_LOGIN_SUCCESS = 'auth/AUTO_LOGIN_SUCCESS';
-const AUTO_LOGIN_ERROR = 'auth/LOGIN_ERROR';
+const AUTO_LOGIN_ERROR = 'auth/AUTO_LOGIN_ERROR';
 
-export const login =
-  (email, password) =>
-  async (dispatch, getState, { history }) => {
-    dispatch({ type: LOGIN });
-    try {
-      const res = await axios({
-        method: 'post',
-        url: '/auth/login',
-        data: { email, password },
-      });
-      const { user } = res.data;
-      dispatch({ type: LOGIN_SUCCESS });
-      dispatch({ type: AUTO_LOGIN_SUCCESS, payload: user });
-      history.push('/');
-    } catch (e) {
-      const error =
-        e.response.status === 409 ? '아이디 또는 비밀번호가 틀립니다' : e;
-      dispatch({ type: LOGIN_ERROR, payload: error });
-    }
-  };
+export const login = (email, password) =>
+  authThunk(LOGIN, () => authAPI.login(email, password));
 
-// 로딩 구현 안함. 어차피 나중에 리팩토링
 export const logout = () => async (dispatch) => {
   dispatch({ type: LOGOUT });
   try {
@@ -44,41 +27,22 @@ export const logout = () => async (dispatch) => {
   }
 };
 
-export const register =
-  (email, password) =>
-  async (dispatch, getState, { history }) => {
-    dispatch({ type: REGISTER });
-    try {
-      const res = await axios({
-        method: 'post',
-        url: '/auth/register',
-        data: { email, password },
-      });
-      if (res.status === 200) {
-        dispatch({ type: REGISTER_SUCCESS });
-        alert('회원가입을 축하합니다.');
-        history.push('/');
-      }
-    } catch (e) {
-      const error = e.response.status === 409 ? '아이디가 존재합니다' : e;
-      dispatch({ type: REGISTER_ERROR, payload: error });
-    }
-  };
+export const register = (email, password) =>
+  authThunk(REGISTER, () => authAPI.register(email, password));
 
 export const autoLogin = () => async (dispatch) => {
   dispatch({ type: AUTO_LOGIN });
   try {
     const res = await axios.get('/auth');
-    console.log(res);
     dispatch({ type: AUTO_LOGIN_SUCCESS, payload: res.data.user });
-  } catch (error) {
+  } catch (e) {
+    const error = e.response.status === 401 ? '자동 로그인 실패' : e;
     dispatch({ type: AUTO_LOGIN_ERROR, payload: error });
   }
 };
 
 const initialState = {
   login: {
-    user: null,
     loading: false,
     error: null,
   },
@@ -98,16 +62,18 @@ const auth = handleActions(
     [LOGIN]: (state) => ({
       ...state,
       login: {
-        // user: null,
         loading: true,
         error: null,
       },
     }),
-    [LOGIN_SUCCESS]: (state) => ({
+    [LOGIN_SUCCESS]: (state, { payload: user }) => ({
       ...state,
       login: {
         loading: false,
         error: null,
+      },
+      user: {
+        user,
       },
     }),
     [LOGIN_ERROR]: (state, { payload: error }) => ({
