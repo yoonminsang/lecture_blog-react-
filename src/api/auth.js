@@ -36,3 +36,13 @@ export const register = async (email, password) => {
     throw new Error(error);
   }
 };
+
+export const autoLogin = async () => {
+  try {
+    const res = await axios.get('/auth');
+    return res.data.user;
+  } catch (e) {
+    const error = e.response.status === 401 ? '자동 로그인 실패' : e;
+    throw new Error(error);
+  }
+};

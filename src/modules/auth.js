@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { handleActions } from 'redux-actions';
-import { authThunk } from '../lib/reduxUtils';
+import { authThunk, autoLoginThunk } from '../lib/reduxUtils';
 import * as authAPI from '../api/auth';
 
 const LOGIN = 'auth/LOGIN';
@@ -10,7 +10,7 @@ const LOGOUT = 'auth/LOGOUT';
 const REGISTER = 'auth/REGISTER';
 const REGISTER_SUCCESS = 'auth/REGISTER_SUCCESS';
 const REGISTER_ERROR = 'auth/REGISTER_ERROR';
-const AUTO_LOGIN = 'auh/AUTOLOGIN';
+const AUTO_LOGIN = 'auth/AUTO_LOGIN';
 const AUTO_LOGIN_SUCCESS = 'auth/AUTO_LOGIN_SUCCESS';
 const AUTO_LOGIN_ERROR = 'auth/AUTO_LOGIN_ERROR';
 
@@ -30,16 +30,8 @@ export const logout = () => async (dispatch) => {
 export const register = (email, password) =>
   authThunk(REGISTER, () => authAPI.register(email, password));
 
-export const autoLogin = () => async (dispatch) => {
-  dispatch({ type: AUTO_LOGIN });
-  try {
-    const res = await axios.get('/auth');
-    dispatch({ type: AUTO_LOGIN_SUCCESS, payload: res.data.user });
-  } catch (e) {
-    const error = e.response.status === 401 ? '자동 로그인 실패' : e;
-    dispatch({ type: AUTO_LOGIN_ERROR, payload: error });
-  }
-};
+export const autoLogin = () =>
+  autoLoginThunk(AUTO_LOGIN, () => authAPI.autoLogin());
 
 const initialState = {
   login: {

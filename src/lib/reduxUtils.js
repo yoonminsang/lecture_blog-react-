@@ -19,6 +19,18 @@ export const authThunk = (type, fetch) => {
 
 export const logoutThunk = () => {};
 
+export const autoLoginThunk = (type, fetch) => {
+  const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+  return async (dispatch) => {
+    dispatch({ type });
+    try {
+      const payload = await fetch();
+      dispatch({ type: SUCCESS, payload });
+    } catch (error) {
+      dispatch({ type: ERROR, payload: error.message });
+    }
+  };
+};
 // export const promiseThunk = (type, fetch) => {
 //   const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
 //   return async (dispatch, getState) => {
