@@ -10,30 +10,32 @@ export const login = async (email, password) => {
     const { user } = res.data;
     return user;
   } catch (e) {
-    const error =
-      e.response.status === 409 ? '아이디 또는 비밀번호가 틀립니다' : e;
-    throw new Error(error);
+    if (e.response.data.length === 0) throw new Error(e);
+    throw new Error(e.response.data);
   }
 };
 
 export const logout = async () => {
   try {
-    await axios.get('/auth/logout');
-  } catch (error) {
-    throw new Error(error);
+    const res = await axios.get('/auth/logout');
+    console.log(res.data);
+  } catch (e) {
+    throw new Error(e);
   }
 };
 
 export const register = async (email, password) => {
   try {
-    await axios({
+    const res = await axios({
       method: 'post',
       url: '/auth/register',
       data: { email, password },
     });
+    console.log(res.data);
+    return res.data;
   } catch (e) {
-    const error = e.response.status === 409 ? '아이디가 존재합니다' : e;
-    throw new Error(error);
+    if (e.response.data.length === 0) throw new Error(e);
+    throw new Error(e.response.data);
   }
 };
 
@@ -42,7 +44,7 @@ export const autoLogin = async () => {
     const res = await axios.get('/auth');
     return res.data.user;
   } catch (e) {
-    const error = e.response.status === 401 ? '자동 로그인 실패' : e;
-    throw new Error(error);
+    if (e.response.data.length === 0) throw new Error(e);
+    throw new Error(e.response.data);
   }
 };

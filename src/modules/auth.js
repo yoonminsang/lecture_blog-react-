@@ -1,12 +1,13 @@
-import axios from 'axios';
 import { handleActions } from 'redux-actions';
-import { authThunk, autoLoginThunk } from '../lib/reduxUtils';
+import { authThunk, autoLoginThunk, logoutThunk } from '../lib/reduxUtils';
 import * as authAPI from '../api/auth';
 
 const LOGIN = 'auth/LOGIN';
 const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 const LOGIN_ERROR = 'auth/LOGIN_ERROR';
 const LOGOUT = 'auth/LOGOUT';
+const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
+const LOGOUT_ERROR = 'auth/LOGOUT_ERROR';
 const REGISTER = 'auth/REGISTER';
 const REGISTER_SUCCESS = 'auth/REGISTER_SUCCESS';
 const REGISTER_ERROR = 'auth/REGISTER_ERROR';
@@ -17,15 +18,7 @@ const AUTO_LOGIN_ERROR = 'auth/AUTO_LOGIN_ERROR';
 export const login = (email, password) =>
   authThunk(LOGIN, () => authAPI.login(email, password));
 
-export const logout = () => async (dispatch) => {
-  dispatch({ type: LOGOUT });
-  try {
-    await axios.get('/auth/logout');
-    dispatch({ type: AUTO_LOGIN_ERROR });
-  } catch (e) {
-    console.error(e);
-  }
-};
+export const logout = () => logoutThunk(LOGOUT, () => authAPI.logout());
 
 export const register = (email, password) =>
   authThunk(REGISTER, () => authAPI.register(email, password));
@@ -78,7 +71,23 @@ const auth = handleActions(
     [LOGOUT]: (state) => ({
       ...state,
       user: {
+        ...state.user,
+        loading: true,
+        error: null,
+      },
+    }),
+    [LOGOUT_SUCCESS]: (state) => ({
+      ...state,
+      user: {
         user: null,
+        loading: false,
+        error: null,
+      },
+    }),
+    [LOGOUT_ERROR]: (state) => ({
+      ...state,
+      user: {
+        ...state.user,
         loading: false,
         error: null,
       },
