@@ -61,13 +61,15 @@ const AuthForm = ({
         return passwardRef.current.focus();
       case 'passwardConfirm':
         return passwardConfirmRef.current.focus();
+      default:
+        return;
     }
   }, [errorType]);
   const text = type === 'login' ? '로그인' : '회원가입';
   const { email, password, passwordConfirm } = input;
   return (
     <>
-      {loading && <div>로딩</div>}
+      {loading && <div>로딩중...</div>}
       <AuthFormBlock>
         <form onSubmit={onSubmit}>
           <Input
@@ -96,7 +98,7 @@ const AuthForm = ({
             />
           )}
           {error && <ErrorDiv>{error}</ErrorDiv>}
-          <MarginButton blue fullWidth>
+          <MarginButton blue fullWidth disabled={loading}>
             {text}
           </MarginButton>
           <Footer>
