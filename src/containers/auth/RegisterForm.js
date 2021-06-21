@@ -12,9 +12,11 @@ const RegisterForm = () => {
     password: '',
     passwordConfirm: '',
   });
-  const { authError, loading } = useSelector(({ auth }) => ({
+  const { user, authError, loading, userLoading } = useSelector(({ auth }) => ({
+    user: auth.user.user,
     authError: auth.register.error,
     loading: auth.register.loading,
+    userLoading: auth.user.loading,
   }));
   useEffect(() => {
     setError(authError);
@@ -61,6 +63,8 @@ const RegisterForm = () => {
       error={error}
       errorType={errorType}
       loading={loading}
+      user={user}
+      userLoading={userLoading}
     />
   );
 };

@@ -8,16 +8,23 @@ const PostListBlock = styled.div`
   margin: 1rem auto;
 `;
 
-// const WriteButton = styled(Button)``;
+const Flex = styled.div`
+  display: flex;
+`;
+const WriteButton = styled(Button)`
+  margin-left: auto;
+`;
 
 const PostList = ({ user }) => {
   return (
     <>
       <PostListBlock>
         {user && user.grade === 'manager' && (
-          <Button to="/write" blue="true">
-            글쓰기
-          </Button>
+          <Flex>
+            <WriteButton to="/write" blue="true">
+              글쓰기
+            </WriteButton>
+          </Flex>
         )}
       </PostListBlock>
     </>

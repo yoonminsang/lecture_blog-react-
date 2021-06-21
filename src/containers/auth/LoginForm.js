@@ -11,9 +11,11 @@ const LoginForm = () => {
     email: '',
     password: '',
   });
-  const { authError, loading } = useSelector(({ auth }) => ({
+  const { user, authError, loading, userLoading } = useSelector(({ auth }) => ({
+    user: auth.user.user,
     authError: auth.login.error,
     loading: auth.login.loading,
+    userLoading: auth.user.loading,
   }));
   useEffect(() => {
     setError(authError);
@@ -46,6 +48,8 @@ const LoginForm = () => {
       error={error}
       errorType={errorType}
       loading={loading}
+      user={user}
+      userLoading={userLoading}
     />
   );
 };

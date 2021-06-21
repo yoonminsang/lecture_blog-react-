@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../common/Button';
+import Unauthorized from '../common/Unauthorized';
 
 const AuthFormBlock = styled.div``;
 const Input = styled.input`
@@ -49,10 +50,13 @@ const AuthForm = ({
   error,
   errorType,
   loading,
+  user,
+  userLoading,
 }) => {
   const emailRef = useRef(null);
   const passwardRef = useRef(null);
   const passwardConfirmRef = useRef(null);
+
   useEffect(() => {
     switch (errorType) {
       case 'email':
@@ -65,6 +69,8 @@ const AuthForm = ({
         return;
     }
   }, [errorType]);
+  if (userLoading) return null;
+  else if (user) return <Unauthorized />;
   const text = type === 'login' ? '로그인' : '회원가입';
   const { email, password, passwordConfirm } = input;
   return (
