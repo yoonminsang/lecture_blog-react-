@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { authThunk, autoLoginThunk, logoutThunk } from '../lib/reduxUtils';
-import * as authAPI from '../api/auth';
+import * as authAPI from 'lib/api/auth';
 
 const LOGIN = 'auth/LOGIN';
 const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';

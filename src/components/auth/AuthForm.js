@@ -1,5 +1,5 @@
 import oc from 'open-color';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../common/Button';
@@ -48,27 +48,13 @@ const AuthForm = ({
   onChange,
   onSubmit,
   error,
-  errorType,
   loading,
   user,
   userLoading,
+  emailRef,
+  passwordRef,
+  passwordConfirmRef,
 }) => {
-  const emailRef = useRef(null);
-  const passwardRef = useRef(null);
-  const passwardConfirmRef = useRef(null);
-
-  useEffect(() => {
-    switch (errorType) {
-      case 'email':
-        return emailRef.current.focus();
-      case 'password':
-        return passwardRef.current.focus();
-      case 'passwardConfirm':
-        return passwardConfirmRef.current.focus();
-      default:
-        return;
-    }
-  }, [errorType]);
   if (userLoading) return null;
   else if (user) return <Unauthorized />;
   const text = type === 'login' ? '로그인' : '회원가입';
@@ -86,7 +72,7 @@ const AuthForm = ({
             onChange={onChange}
           />
           <Input
-            ref={passwardRef}
+            ref={passwordRef}
             placeholder="비밀번호"
             name="password"
             value={password}
@@ -95,7 +81,7 @@ const AuthForm = ({
           />
           {type === 'register' && (
             <Input
-              ref={passwardConfirmRef}
+              ref={passwordConfirmRef}
               placeholder="비밀번호 확인"
               name="passwordConfirm"
               value={passwordConfirm}
@@ -104,7 +90,7 @@ const AuthForm = ({
             />
           )}
           {error && <ErrorDiv>{error}</ErrorDiv>}
-          <MarginButton blue fullWidth disabled={loading}>
+          <MarginButton blue fullwidth disabled={loading}>
             {text}
           </MarginButton>
           <Footer>

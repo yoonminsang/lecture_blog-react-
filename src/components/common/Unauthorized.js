@@ -29,7 +29,7 @@ const Unauthorized = () => {
       <UnauthorizedBlock>
         <Flex>
           <h1>권한이 없습니다</h1>
-          <Button to="/" gray="true" fullWidth="true">
+          <Button to="/" gray="true" fullwidth="true">
             Home
           </Button>
         </Flex>

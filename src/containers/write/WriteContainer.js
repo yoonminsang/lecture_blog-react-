@@ -1,3 +1,4 @@
+import { writePost } from 'modules/write';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Write from '../../components/wirte/Write';
@@ -23,7 +24,7 @@ const WriteContainer = () => {
     if (title === '') {
       titleRef.current.focus();
     } else {
-      // dispatch(login(email, password));
+      dispatch(writePost(title, content));
     }
   };
   return (

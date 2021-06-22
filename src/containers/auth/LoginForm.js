@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AuthForm from '../../components/auth/AuthForm';
 import { login } from '../../modules/auth';
@@ -6,11 +6,12 @@ import { login } from '../../modules/auth';
 const LoginForm = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-  const [errorType, setErrorType] = useState(null);
   const [input, setInput] = useState({
     email: '',
     password: '',
   });
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const { user, authError, loading, userLoading } = useSelector(({ auth }) => ({
     user: auth.user.user,
     authError: auth.login.error,
@@ -19,7 +20,7 @@ const LoginForm = () => {
   }));
   useEffect(() => {
     setError(authError);
-    if (authError) setErrorType('email');
+    if (authError) emailRef.current.focus();
   }, [authError]);
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -30,10 +31,10 @@ const LoginForm = () => {
     const { email, password } = input;
     if (email === '') {
       setError('이메일을 입력하세요');
-      setErrorType('email');
+      emailRef.current.focus();
     } else if (password === '') {
       setError('비밀번호를 입력하세요');
-      setErrorType('password');
+      passwordRef.current.focus();
     } else {
       dispatch(login(email, password));
     }
@@ -46,10 +47,11 @@ const LoginForm = () => {
       onChange={onChange}
       onSubmit={onSubmit}
       error={error}
-      errorType={errorType}
       loading={loading}
       user={user}
       userLoading={userLoading}
+      emailRef={emailRef}
+      passwordRef={passwordRef}
     />
   );
 };
