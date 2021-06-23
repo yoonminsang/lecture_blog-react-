@@ -52,8 +52,22 @@ export const writeThunk = (type, fetch) => {
     try {
       const id = await fetch();
       dispatch({ type: SUCCESS });
-      console.log('write thunk', id);
       history.push(`/posts/${id}`);
+    } catch (error) {
+      dispatch({ type: ERROR, payload: error.message });
+    }
+  };
+};
+
+export const postListThunk = (type, fetch) => {
+  const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+  console.log('postlist thunk', type, fetch);
+  return async (dispatch) => {
+    dispatch({ type });
+    try {
+      console.log('hi');
+      const payload = await fetch();
+      dispatch({ type: SUCCESS, payload });
     } catch (error) {
       dispatch({ type: ERROR, payload: error.message });
     }

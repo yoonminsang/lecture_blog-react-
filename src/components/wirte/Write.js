@@ -42,8 +42,16 @@ const SaveButton = styled(Button)`
   margin-left: auto;
   font-size: 1.25rem;
 `;
-const Write = ({ user, loading, input, onChange, titleRef, onSubmit }) => {
-  if (loading) return null;
+const Write = ({
+  user,
+  userLoading,
+  writeLoading,
+  input,
+  onChange,
+  titleRef,
+  onSubmit,
+}) => {
+  if (userLoading) return null;
   else if (!user || user.grade !== 'manager') return <Unauthorized />;
   const { title, content } = input;
   return (
@@ -70,7 +78,12 @@ const Write = ({ user, loading, input, onChange, titleRef, onSubmit }) => {
         ></textarea>
       </Content>
       <Flex>
-        <SaveButton gray radius="true" onClick={onSubmit}>
+        <SaveButton
+          gray
+          radius="true"
+          onClick={onSubmit}
+          disabled={writeLoading}
+        >
           저장
         </SaveButton>
       </Flex>

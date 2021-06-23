@@ -5,9 +5,12 @@ import Write from '../../components/wirte/Write';
 
 const WriteContainer = () => {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector(({ auth }) => ({
+  const { user, userLoading } = useSelector(({ auth }) => ({
     user: auth.user.user,
-    loading: auth.user.loading,
+    userLoading: auth.user.loading,
+  }));
+  const { writeLoading } = useSelector(({ write }) => ({
+    writeLoading: write.write.loading,
   }));
   const [input, setInput] = useState({
     title: '',
@@ -30,7 +33,8 @@ const WriteContainer = () => {
   return (
     <Write
       user={user}
-      loading={loading}
+      userLoading={userLoading}
+      writeLoading={writeLoading}
       input={input}
       onChange={onChange}
       titleRef={titleRef}

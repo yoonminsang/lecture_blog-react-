@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import { writeThunk } from '../lib/reduxUtils';
 import * as writeAPI from 'lib/api/write';
 
-const WRITE = 'wirte/WRITE';
+const WRITE = 'write/WRITE';
 const WRITE_SUCCESS = 'write/WRITE_SUCCESS';
 const WRITE_ERROR = 'write/WRITE_ERROR';
 // const UPDATE='write/UPDATE'

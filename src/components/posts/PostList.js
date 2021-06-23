@@ -14,8 +14,11 @@ const Flex = styled.div`
 const WriteButton = styled(Button)`
   margin-left: auto;
 `;
+const Grid = styled.div`
+  display: grid;
+`;
 
-const PostList = ({ user }) => {
+const PostList = ({ user, postList }) => {
   return (
     <>
       <PostListBlock>
