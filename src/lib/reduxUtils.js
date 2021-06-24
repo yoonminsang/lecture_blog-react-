@@ -61,11 +61,9 @@ export const writeThunk = (type, fetch) => {
 
 export const postListThunk = (type, fetch) => {
   const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
-  console.log('postlist thunk', type, fetch);
   return async (dispatch) => {
     dispatch({ type });
     try {
-      console.log('hi');
       const payload = await fetch();
       dispatch({ type: SUCCESS, payload });
     } catch (error) {

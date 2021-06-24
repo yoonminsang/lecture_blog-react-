@@ -20,7 +20,6 @@ const PostListContainer = () => {
   const { postList } = useSelector(({ postList }) => ({
     postList: postList.postList,
   }));
-  console.log(user, postList);
   return <PostList user={user} postList={postList} />;
 };
 
