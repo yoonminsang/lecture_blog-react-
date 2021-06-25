@@ -62,7 +62,21 @@ const Header = ({ user, onLogout }) => {
             <SearchButton>
               <AiOutlineSearch />
             </SearchButton>
-            {user ? (
+            {user === null ? (
+              <Button to="/login" gray="true">
+                로그인
+              </Button>
+            ) : (
+              user && (
+                <>
+                  <div>{user.email}</div>
+                  <Button gray="true" onClick={onLogout}>
+                    로그아웃
+                  </Button>
+                </>
+              )
+            )}
+            {/* {user ? (
               <>
                 <div>{user.email}</div>
                 <Button gray="true" onClick={onLogout}>
@@ -73,7 +87,7 @@ const Header = ({ user, onLogout }) => {
               <Button to="/login" gray="true">
                 로그인
               </Button>
-            )}
+            )} */}
           </Right>
         </Flex>
       </HeaderBlock>

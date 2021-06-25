@@ -3,6 +3,9 @@ body {
   width: 100%;
   min-height: 100%;
 }
+html {
+  overflow-y: scroll;
+}
 body {
   box-sizing: border-box;
 }

@@ -36,7 +36,7 @@ const initialState = {
     error: null,
   },
   user: {
-    user: null,
+    user: undefined,
     loading: false,
     error: null,
   },
@@ -116,7 +116,7 @@ const auth = handleActions(
     [AUTO_LOGIN]: (state) => ({
       ...state,
       user: {
-        user: null,
+        user: undefined,
         loading: true,
         error: null,
       },
