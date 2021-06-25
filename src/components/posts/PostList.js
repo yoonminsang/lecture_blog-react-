@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import oc from 'open-color';
+import Loading from 'components/common/Loading';
 
 const PostListBlock = styled.div`
   width: 81.25rem;
@@ -68,7 +69,7 @@ const ColumnFlex = styled.div`
   }
 `;
 
-const PostList = ({ user, postList }) => {
+const PostList = ({ user, postList, loading }) => {
   return (
     <>
       <PostListBlock>
@@ -79,23 +80,27 @@ const PostList = ({ user, postList }) => {
             </WriteButton>
           </Flex>
         )}
-        <Grid>
-          {postList &&
-            postList.map((post) => (
-              <Post key={post.id}>
-                <ColumnFlex>
-                  <Link to={`/posts/${post.id}`}>
-                    <h4 className="title">{post.title}</h4>
-                    <div className="content">{post.content}</div>
-                  </Link>
-                  <span className="created">{post.created}</span>
-                  <span className="user">
-                    by <b>{post.email}</b>
-                  </span>
-                </ColumnFlex>
-              </Post>
-            ))}
-        </Grid>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Grid>
+            {postList &&
+              postList.map((post) => (
+                <Post key={post.id}>
+                  <ColumnFlex>
+                    <Link to={`/posts/${post.id}`}>
+                      <h4 className="title">{post.title}</h4>
+                      <div className="content">{post.content}</div>
+                    </Link>
+                    <span className="created">{post.created}</span>
+                    <span className="user">
+                      by <b>{post.email}</b>
+                    </span>
+                  </ColumnFlex>
+                </Post>
+              ))}
+          </Grid>
+        )}
       </PostListBlock>
     </>
   );

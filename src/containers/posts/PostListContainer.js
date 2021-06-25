@@ -17,10 +17,12 @@ const PostListContainer = () => {
   const { user } = useSelector(({ auth }) => ({
     user: auth.user.user,
   }));
-  const { postList } = useSelector(({ postList }) => ({
+  const { postList, loading } = useSelector(({ postList }) => ({
     postList: postList.postList,
+    loading: postList.loading,
   }));
-  return <PostList user={user} postList={postList} />;
+  console.log(loading);
+  return <PostList user={user} postList={postList} loading={loading} />;
 };
 
 export default PostListContainer;
